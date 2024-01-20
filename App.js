@@ -6,6 +6,9 @@ export default function App() {
 
   //const accelX = (acceleration.x * kFilteringFactor) + (accelX * (1.0 - kFilteringFactor));
   const [acceleration, setAcceleration] = useState({ x: 0, y: 0, z: 0 });
+  const [velocity, setVelocity] = useState({ x: 0, y: 0, z: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0, z: 0 });
+  const [moving, setMoving] = useState({x: 0, y: 0, z: 0});
   const [max, setMax] = useState(0);
   const [min, setMin] = useState(0);
   const [step, setStep] = useState(0);
@@ -16,13 +19,51 @@ export default function App() {
     y: 0,
     z: 0,
   });
-
-  const _slow = () => Accelerometer.setUpdateInterval(1000);
-  const _fast = () => Accelerometer.setUpdateInterval(16);
+  Accelerometer.setUpdateInterval(100);
 
   const accelSubscribe = () => {
     setAccelSub(Accelerometer.addListener(({ x, y, z }) => {
+      const movingX = moving.x * 0.9 + x * 0.1;
+      const movingY = moving.y * 0.9 + y * 0.1;
+      setMoving({x: movingX, y: movingY, z:0});
+      x -= movingX;
+      y -= movingY;
+      x *= 9.8;
+      y *= 9.8;
       setAcceleration({ x, y, z });
+      const velX = velocity.x + x * 0.1;
+      console.log(movingX);
+      const velY = velocity.y + y * 0.1;
+      setVelocity({x: velX, y: velY, z: 0});
+      const posX = position.x + velX * 0.1;
+      const posY = position.y + velY * 0.1;
+      setPosition({x: posX, y: posY, z: 0});
+      if(Math.abs(gyro.gamma) < 1) {
+        if(x > 0) {
+          x -= Math.abs(gyro.gamma);
+        } else {
+          x += Math.abs(gyro.gamma);
+        }
+      } else {
+        if(x > 0) {
+          x -= 1;
+        } else {
+          x += 1;
+        }
+      }
+      if(Math.abs(gyro.beta) < 1) {
+        if(y > 0) {
+          y -= Math.abs(gyro.beta);
+        } else {
+          y += Math.abs(gyro.beta);
+        }
+      } else {
+        if(y > 0) {
+          y -= 1;
+        } else {
+          y += 1;
+        }
+      }
       let accel = 0;
       accel = ((Math.sqrt(x ** 2 + y ** 2)) * 0.1 + accel * (1 - 0.1)) * 10;
       if(accel > max) {
@@ -40,45 +81,40 @@ export default function App() {
     setAccelSub(null);
   };
 
+  const [gyro, setGyro] = useState({ alpha: 0, beta: 0, gamma: 0 });
   const [gyroSub, setGyroSub] = useState(null);
-  const [angles, setAngles] = useState({ pitch: 0, yaw: 0, roll: 0 });
-  const [lastGyroscopeData, setLastGyroscopeData] = useState({ x: 0, y: 0, z: 0 });
-  Gyroscope.setUpdateInterval(100);
 
-  const gyroSubscribe = () => {
+  DeviceMotion.setUpdateInterval(100);
+
+  const rotateSubscribe = () => {
     setGyroSub(
-      Gyroscope.addListener(({ x, y, z }) => {
-        setData({ x, y, z });
-        const pitch = (angles.pitch + (angles.pitch + y)) * (0.1 / 2);
-        const yaw = (angles.yaw + (angles.yaw + z)) * (0.1 / 2);
-        const roll = (angles.roll + (angles.roll + x)) * (0.1 / 2);
-
-        // Update state with the new angles
-        setAngles({ pitch, yaw, roll });
-        setLastGyroscopeData({ x, y, z });
+      DeviceMotion.addListener((orientation) => {
+        const { alpha, beta, gamma } = orientation.rotation;
+        setGyro({alpha, beta, gamma});
       })
     );
-  };
+  }
 
-  const gyroUnsubscribe = () => {
+  const rotateUnsubscribe = () => {
     gyroSub && gyroSub.remove();
     setGyroSub(null);
   };
 
   useEffect(() => {
     accelSubscribe();
-    gyroSubscribe();
-    return () => accelUnsubscribe();
-  }, [acceleration, angles.pitch]);
+    return () => {
+      accelUnsubscribe();
+    };
+  }, [acceleration, velocity]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Accelerometer: (in gs where 1g = 9.81 m/s^2)</Text>
       <Text style={styles.text}>step: {step}</Text>
       <Text style={styles.text}>accelMax: {max}</Text>
-      <Text style={styles.text}>x: {angles.pitch}</Text>
-      <Text style={styles.text}>y: {angles.yaw}</Text>
-      <Text style={styles.text}>z: {angles.roll}</Text>
+      <Text style={styles.text}>x: {position.x}</Text>
+      <Text style={styles.text}>y: {position.y}</Text>
+      <Text style={styles.text}>z: {gyro.gamma}</Text>
     </View>
   );
 }
