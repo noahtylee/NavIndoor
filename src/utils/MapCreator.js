@@ -7,8 +7,8 @@ import { ref, update, onValue, set } from 'firebase/database'
 import { database } from '../../FirebaseConfig';
 
 // custom modules
-import { range } from './sensors_utils';
-import { useHeading, useStepLength, useAccStep } from './customHooks';
+import { range } from './sensorMath';
+import { useHeading, useStepLength, useAccStep } from './stepTracker';
 
 export default function MapCreator({ navigation }) {
   // Listeners

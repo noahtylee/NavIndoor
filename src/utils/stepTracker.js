@@ -6,7 +6,7 @@ import {
   toGCS,
   range,
   object_sign_inversion,
-} from './sensors_utils';
+} from './sensorMath';
 
 export function useGyrAngle(gyr) {
   const ref = useRef({ pitch: 0, roll: 0, yaw: 0 });
