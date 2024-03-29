@@ -3,14 +3,14 @@ import { Dimensions, TouchableOpacity, View, TextInput, Text, StyleSheet } from 
 import { Accelerometer, Magnetometer, Gyroscope } from 'expo-sensors';
 import Canvas from 'react-native-canvas';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ref, update, onValue } from 'firebase/database'
+import { ref, update, onValue, set } from 'firebase/database'
 import { database } from '../../FirebaseConfig';
 
 // custom modules
 import { range } from './sensors_utils';
 import { useHeading, useStepLength, useAccStep } from './customHooks';
 
-export default function LocationScreen({ navigation }) {
+export default function MapCreator({ navigation }) {
   // Listeners
   const [acc, setAcc] = useState({ x: 0, y: 0, z: 0 });
   const [mag, setMag] = useState({ x: 0, y: 0, z: 0 });
@@ -53,6 +53,7 @@ export default function LocationScreen({ navigation }) {
   const [angles, setAngles] = useState([]);
   const [positions, setPos] = useState([]);
   const [mapName, setMapName] = useState('');
+  const [nodeObject, setNodeObject] = useState({});
 
   useEffect(() => {
     if (accEvent && !isNaN(stepLength)) {
@@ -77,6 +78,18 @@ export default function LocationScreen({ navigation }) {
     graph[end] = length;
     visualMap[end] = heading;
     nodePos[end] = location.x + ' ' + location.y;
+
+    let realGraph = nodeObject;
+    if(Object.hasOwn(nodeObject, start)) {
+      let inside = nodeObject[start];
+      inside[end] = length;
+      realGraph[start] = inside;
+    } else {
+      let inside = new Object();
+      inside[end] = length;
+      realGraph[start] = inside;
+    }
+    setNodeObject(realGraph);
 
     update(ref(database, mapName + '/nodeGraph/' + start), graph);
     update(ref(database, mapName + '/visualGraph/' + start), visualMap);
@@ -120,7 +133,7 @@ export default function LocationScreen({ navigation }) {
   const [location, setLocation] = useState({ x: 0, y: 0 });
   
   const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height - 64;
+  const windowHeight = Dimensions.get('window').height / 2;
 
   useEffect(() => {
     let nx = stepLength ? stepLength * Math.sin(headingStep) * 10 : 0,
@@ -146,6 +159,7 @@ export default function LocationScreen({ navigation }) {
     const nodeLocations = Object.values(positions);
     const nodeConnections = Object.keys(nodes).map((key) => [key, Object.keys(nodes[key])]);
     ctx.strokeStyle = "blue";
+    ctx.lineWidth = 5;
     for(let i = 0; i < nodeConnections.length; i++) {
       let index = nodeNames.indexOf(nodeConnections[i][0]);
       for(let j = 0; j < nodeConnections[i][1].length; j++) {
@@ -163,9 +177,15 @@ export default function LocationScreen({ navigation }) {
     }
   };
 
+  const handleSubmit = async () => {
+    set(ref(database, mapName + '/nodeObject'), nodeObject);
+    navigation.navigate('Tracker');
+  }
+
   return (
     <View style={styles.container}>
       <Canvas ref={canvasRef} style={styles.map}/>
+      <Text>{length}</Text>
       <TextInput
       onChangeText={setStart}
       value={start}
@@ -178,7 +198,8 @@ export default function LocationScreen({ navigation }) {
       placeholder="Ending"
       keyboardType="default"
       />
-      <TouchableOpacity onPress={status ? setNode : resetLength}><Text>{status ? 'Stop Tracking' : 'Begin Tracking'}</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={status ? setNode : resetLength}><Text style={styles.btnLabel}>{status ? 'Stop Tracking' : 'Begin Tracking'}</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={handleSubmit}><Text style={styles.btnLabel}>Done Mapping</Text></TouchableOpacity>
     </View>
   );
 }
@@ -190,7 +211,18 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center'
     },
-    map: {
-
-    }
+    btn: {
+      backgroundColor: '#478eff',
+      width: '70%',
+      height: 50,
+      borderRadius: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: 20,
+    },
+    btnLabel: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      fontFamily: 'Roboto',
+    },
   })

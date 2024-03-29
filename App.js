@@ -6,6 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import MapCreator from "./src/utils/MapCreator";
 import MapNamer from "./src/utils/MapNamer";
+import Tracker from "./src/utils/Tracker";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,11 @@ export default App = () => {
   return (
     <NavigationContainer>
     <Stack.Navigator>
+      <Stack.Screen
+        name="Tracker"
+        component={Tracker}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="MapNamer"
         component={MapNamer}

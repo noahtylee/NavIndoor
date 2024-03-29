@@ -324,6 +324,7 @@ export function useStepLength(acc, mag, gyr) {
 
   useEffect(() => {
     setAccList((al) => [...al, accStep]);
+    console.log(acc.x);
     setHeadingList((hl) => [...hl, heading]);
     if (accEvent) {
       let peakIdx = accList.indexOf(accEvent);
