@@ -15,6 +15,7 @@ For user navigation, Dijkstra’s algorithm will be applied on the previously ge
 <h3>User Navigation:<h3>
 <img src="https://github.com/noahtylee/NavIndoor/assets/91506066/5e736ec8-592b-44ee-96e3-de6349fd749c" />
 <br>
+<p>
 In order to combat the inaccuracies presented by inertial sensors, the application  processes the inertial sensor data through a low pass filter, helping to avoid any sudden changes in data.
 </p>
 <hr>
