@@ -8,7 +8,7 @@
 In order to generate the indoor navigation system, the application consists of two steps: map generation and user navigation. In map generation, the user manually creates a virtual map of the indoor environment through the application, which can then be used for navigation. This is accomplished by tracking the smartphone’s displacement between points of interest, which includes indoor landmarks, rooms, intersections, or other important locations. From there, the application consolidates the distances between points of interest and constructs a node graph representation of the indoor environment, consisting of points of interest as the nodes and the distances between them as the edges. This information is stored in a backend database, which can then be retrieved when a user chooses to navigate the indoor space.
 <br>
 <h3>Map Generation:</h3>
-![image](https://github.com/noahtylee/NavIndoor/assets/91506066/0ac73fa6-7f50-44ee-be22-d147ebd68ef3)
+<img src="https://github.com/noahtylee/NavIndoor/assets/91506066/0ac73fa6-7f50-44ee-be22-d147ebd68ef3" />
 <br>
 For user navigation, Dijkstra’s algorithm will be applied on the previously generated node graph to find the shortest path between two locations that the user inputs. A pedestrian dead reckoning algorithm (PDR) with inertial sensors, including the accelerometer, gyroscope, and magnetometer, will be applied to track the user’s position along that path. The application estimates the number of steps that the user has taken by tracking the time between peaks of acceleration. From there, the difference between the peaks and valleys of acceleration data are used to estimate the user’s step length. By combining step detection and step length estimation, the application is able to track user position.
 <br>
