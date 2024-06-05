@@ -12,7 +12,7 @@ In order to generate the indoor navigation system, the application consists of t
 <br>
 For user navigation, Dijkstra’s algorithm will be applied on the previously generated node graph to find the shortest path between two locations that the user inputs. A pedestrian dead reckoning algorithm (PDR) with inertial sensors, including the accelerometer, gyroscope, and magnetometer, will be applied to track the user’s position along that path. The application estimates the number of steps that the user has taken by tracking the time between peaks of acceleration. From there, the difference between the peaks and valleys of acceleration data are used to estimate the user’s step length. By combining step detection and step length estimation, the application is able to track user position.
 <br>
-<h3>User Navigation:<h3>
+<h3>User Navigation:</h3>
 <img src="https://github.com/noahtylee/NavIndoor/assets/91506066/5e736ec8-592b-44ee-96e3-de6349fd749c" />
 <br>
 <p>
