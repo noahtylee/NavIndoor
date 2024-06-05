@@ -13,13 +13,13 @@ In order to generate the indoor navigation system, the application consists of t
 For user navigation, Dijkstra’s algorithm will be applied on the previously generated node graph to find the shortest path between two locations that the user inputs. A pedestrian dead reckoning algorithm (PDR) with inertial sensors, including the accelerometer, gyroscope, and magnetometer, will be applied to track the user’s position along that path. The application estimates the number of steps that the user has taken by tracking the time between peaks of acceleration. From there, the difference between the peaks and valleys of acceleration data are used to estimate the user’s step length. By combining step detection and step length estimation, the application is able to track user position.
 <br>
 <h3>User Navigation:<h3>
-![image](https://github.com/noahtylee/NavIndoor/assets/91506066/5e736ec8-592b-44ee-96e3-de6349fd749c)
+<img src="https://github.com/noahtylee/NavIndoor/assets/91506066/5e736ec8-592b-44ee-96e3-de6349fd749c" />
 <br>
 In order to combat the inaccuracies presented by inertial sensors, the application  processes the inertial sensor data through a low pass filter, helping to avoid any sudden changes in data.
 </p>
 <hr>
 <h2>Data Analysis</h2>
 <p>The PDR error for low distances was minimal, with the error remaining under one meter when the smartphone was displaced between zero and six meters. After six meters of displacement, the PDR error began to rise more dramatically, reaching a position error above one meter. This demonstrates that the PDR algorithm is largely accurate for low distances, but increases as the smartphone is displaced further. This increasing error can largely be attributed to error accumulation from the accelerometer data. While the accumulated error at low distances is largely negligible, the error continues to accumulate as the smartphone is displaced further. This causes greater differences between the estimated position and the real position at higher distances, as the PDR algorithm is more prone to receiving inaccurate data from the accelerometer. The average standard deviation across three trials was 1.61, indicating a moderate level of variability in the measurements.</p>
-![image](https://github.com/noahtylee/NavIndoor/assets/91506066/888fd111-9205-4dab-ad83-14444f31f56c)
+<img src="https://github.com/noahtylee/NavIndoor/assets/91506066/888fd111-9205-4dab-ad83-14444f31f56c" />
 <br>
-![image](https://github.com/noahtylee/NavIndoor/assets/91506066/882321dd-1f49-4e81-9f1e-7981b37e3842)
+<img src="https://github.com/noahtylee/NavIndoor/assets/91506066/882321dd-1f49-4e81-9f1e-7981b37e3842" />
