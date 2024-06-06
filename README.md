@@ -28,8 +28,14 @@ In order to combat the inaccuracies presented by inertial sensors, the applicati
 <h2>References</h2>
 <p>
 Fan, Q., Zhang, H., Pan, P., Zhuang, X., Jia, J., Zhang, P., Zhao, Z., Zhu, G., & Tang, Y. (2019). Improved pedestrian dead reckoning based on a robust adaptive Kalman filter for indoor inertial location system. Sensors, 19(2), 294. https://doi.org/10.3390/s19020294 
+  
 Gupta, N., Mangla, K., Jha, A. K., & Umar, M. (2016). Applying Dijkstra’s algorithm in routing process. Int. J. New Technol. Res, 2(5), 122-124.
+
 Kang, T., & Shin, Y. (2021). Indoor navigation algorithm based on a smartphone inertial measurement unit and map matching. 2021 International Conference on Information and Communication Technology Convergence (ICTC). https://doi.org/10.1109/ictc52510.2021.9621096 
+
 Kang, W., Nam, S., Han, Y., & Lee, S. (2012). Improved heading estimation for smartphone-based indoor positioning systems. 2012 IEEE 23rd International Symposium on Personal, Indoor and Mobile Radio Communications - (PIMRC). https://doi.org/10.1109/pimrc.2012.6362768 
-Verma, S., Omanwar, R., Sreejith, V., & Meera, G. S. (2016). A smartphone based indoor navigation system. 2016 28th International Conference on Microelectronics (ICM). https://doi.org/10.1109/icm.2016.7847886 </p>
+
 Mairu, M. SmartPDR For React Native, Github repository, https://github.com/Firecommit/react-native-smartpdr
+
+Verma, S., Omanwar, R., Sreejith, V., & Meera, G. S. (2016). A smartphone based indoor navigation system. 2016 28th International Conference on Microelectronics (ICM). https://doi.org/10.1109/icm.2016.7847886
+</p>
